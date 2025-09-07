@@ -43,6 +43,11 @@ namespace Sistema_de_registros_de_usuarios
                 Console.WriteLine("4. Fichar ingreso");
                 Console.WriteLine("5. Fichar Egreso");
                 Console.WriteLine("6. Salir");
+                Console.WriteLine("\n\n########## SOFTWARE DE GESTION DE ENTRADA Y SALIDA DE USUARIOS ##########");
+                Console.WriteLine("#                                                                       #");
+                Console.WriteLine("#                       By Leonel Carro                                 #");
+                Console.WriteLine("#                                                                       #");
+                Console.WriteLine("#########################################################################");
 
                 try
                 {
@@ -66,20 +71,15 @@ namespace Sistema_de_registros_de_usuarios
                         break;
                     case 3:
                         Console.Clear();
-                        Console.WriteLine("Ingrese el Codigo de Usuario que quiere eliminar: ");
-                        UserDao userDao = new UserDao();
-                        UserService userService = new UserService(userDao);
-                        string userId = Console.ReadLine();
-                        int AffectedRows = userService.DeleteUser(userId);
-                        if(AffectedRows == 1) Console.WriteLine("Usuario eliminado");
+                        DeleteUser();
                         break;
                     case 4:
                         Console.Clear();
-                        Console.WriteLine("Seleccionó la opcion 4");
+                        EntryUser();
                         break;
                     case 5:
                         Console.Clear();
-                        Console.WriteLine("Seleccino la opcion 5");
+                        ExitUser();
                         break;
                     case 6:
                         Console.WriteLine("Programa Cerrado...");
@@ -124,11 +124,52 @@ namespace Sistema_de_registros_de_usuarios
             List<User> users = userService.GetUsers();
             foreach (var user in users)
             {
-                Console.WriteLine($"##### Codigo de usuario: {user.CodeUser} ######");
+                Console.WriteLine($"##### Codigo de usuario: {user.Id} ######");
                 Console.WriteLine($"Nombre: {user.Name}");
                 Console.WriteLine($"Edad: {user.Age}");
                 Console.WriteLine("################################################");
             }
+        }
+
+        public static void DeleteUser()
+        {
+            Console.WriteLine("Ingrese el Codigo de Usuario que quiere eliminar: ");
+            UserDao userDao = new UserDao();
+            UserService userService = new UserService(userDao);
+            int id = int.Parse(Console.ReadLine());
+            int AffectedRows = userService.DeleteUser(id);
+            if (AffectedRows == 1) Console.WriteLine("Usuario eliminado.");
+            if (AffectedRows == 0) Console.WriteLine("Usuario no encontrado.");
+        }
+        
+        public static void EntryUser()
+        {
+            Console.WriteLine("Ingrese el identificador del usuario");
+            int userId = int.Parse(Console.ReadLine());
+            ScheduleDao scheduleDao = new ScheduleDao();
+            ScheduleService scheduleService = new ScheduleService(scheduleDao);
+            Schedule schedule = new Schedule()
+            {
+                EntryTime = DateTime.Now,
+                UserId = userId
+            };
+            scheduleService.EntryDataTime(schedule);
+            Console.WriteLine("Entrada de usuario registrada...");
+        }
+
+        public static void ExitUser()
+        {
+            Console.WriteLine("Ingrese el identificador del usuario");
+            int userId = int.Parse(Console.ReadLine());
+            ScheduleDao scheduleDao = new ScheduleDao();
+            ScheduleService scheduleService = new ScheduleService(scheduleDao);
+            Schedule schedule = new Schedule()
+            {
+                ExitTime = DateTime.Now,
+                UserId = userId
+            };
+            scheduleService.EntryDataTime(schedule);
+            Console.WriteLine("Salida de usuario registrada...");
         }
 
     }

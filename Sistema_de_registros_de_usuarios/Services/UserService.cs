@@ -28,9 +28,9 @@ namespace Sistema_de_registros_de_usuarios.Services
            return _userDao.GetUsers();
         }
 
-        public int DeleteUser(string codeUser)
+        public int DeleteUser(int id)
         {
-            return _userDao.DeleteUser(codeUser);
+            return _userDao.DeleteUser(id);
         }
     }
 }

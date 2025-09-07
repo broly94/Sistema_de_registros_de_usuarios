@@ -42,6 +42,7 @@ namespace Sistema_de_registros_de_usuarios.DAO
                     {
                         users.Add(new User()
                         {
+                            Id = reader.GetInt32(0),
                             CodeUser = reader.GetString(1),
                             Name = reader.GetString(2),
                             Age = reader.GetInt32(3)
@@ -53,15 +54,15 @@ namespace Sistema_de_registros_de_usuarios.DAO
             return users;
         }
 
-        public int DeleteUser(string codeUser)
+        public int DeleteUser(int id)
         {
             using (var conn = DbConnection.Instance.GetConnection())
             {
-                var query = "DELETE FROM Users WHERE CodeUser = @CodeUser";
+                var query = "DELETE FROM Users WHERE id = id";
 
                 using (var command = new SqlCommand(query, conn))
                 {
-                    command.Parameters.AddWithValue("@CodeUser", "#" + codeUser);
+                    command.Parameters.AddWithValue("@id", id);
                     return command.ExecuteNonQuery();
                 }
             }
